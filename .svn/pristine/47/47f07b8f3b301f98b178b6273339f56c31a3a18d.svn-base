@@ -1,0 +1,64 @@
+package com.atguigu.imease.model;
+
+import android.content.Context;
+
+import com.atguigu.imease.model.bean.UserInfor;
+import com.atguigu.imease.model.dao.UserAccountDao;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+/**
+ * Created by 颜银 on 2016/11/1.
+ * QQ:443098360
+ * 微信：y443098360
+ * 作用：
+ */
+public class Model {
+    /**
+     * 全局线程池
+     */
+    private ExecutorService executorService = Executors.newCachedThreadPool();
+
+    /**
+     * 单例
+     */
+    private static Model model = new Model();
+
+    /**
+     * 得到账户信息数据库操作类
+     */
+    private UserAccountDao mUserAccountDao;
+
+    public Model() {
+
+    }
+
+    /**
+     *初始化
+     * @param context
+     */
+    public void init(Context context) {
+        //创建数据库
+        mUserAccountDao = new UserAccountDao(context);
+
+    }
+
+    public static Model getInstance() {
+        return model;
+    }
+
+    public ExecutorService getGlobalThreadPool() {
+        return executorService;
+    }
+
+    //得到账户信息数据库操作类
+    public UserAccountDao getmUserAccountDao() {
+        return mUserAccountDao;
+    }
+
+    //信息处理成功的回调
+    public void loginSucess(UserInfor userInfor){
+
+    }
+}
