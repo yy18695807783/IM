@@ -3,6 +3,7 @@ package com.atguigu.imease.model.dao;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.atguigu.imease.model.bean.GroupInfo;
 import com.atguigu.imease.model.bean.InvitationInfo;
@@ -51,6 +52,7 @@ public class InvitationTableDao {
             values.put(InvitationTable.COL_USER_HXID, userInfor.getHxid());//好友ID
             values.put(InvitationTable.COL_USER_NAME, userInfor.getName());//好友名称
         }
+        Log.e("TAG", "ccccccccccccccc");
         db.replace(InvitationTable.TABLE_NAME, null, values);
     }
 
@@ -95,11 +97,17 @@ public class InvitationTableDao {
         cursor.close();
 
         //返回数据
+        Log.e("TAG", "取值----" + invitationInfos.toString());
         return invitationInfos;
     }
 
     // 将int类型状态转换为邀请的状态
     private InvitationInfo.InvitationStatus int2InviteStatus(int intStatus) {
+
+        //新家被拒绝的状态
+        if (intStatus == InvitationInfo.InvitationStatus.INVITE_REJEST.ordinal()) {
+            return InvitationInfo.InvitationStatus.INVITE_REJEST;
+        }
 
         if (intStatus == InvitationInfo.InvitationStatus.NEW_INVITE.ordinal()) {
             return InvitationInfo.InvitationStatus.NEW_INVITE;

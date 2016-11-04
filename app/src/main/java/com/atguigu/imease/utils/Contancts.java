@@ -1,0 +1,16 @@
+package com.atguigu.imease.utils;
+
+/**
+ * Created by 颜银 on 2016/11/4.
+ * QQ:443098360
+ * 微信：y443098360
+ * 作用：应用的常量类
+ */
+public class Contancts {
+
+    //联系变化的广播
+    public static String CONTACT_CHANGED = "contact_changed";
+    //联系人邀请变化的广播
+    public static String CONTACT_INVITE_CHANGED = "contact_invite_changed";
+
+}

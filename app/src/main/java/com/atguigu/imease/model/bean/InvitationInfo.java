@@ -70,6 +70,7 @@ public class InvitationInfo {
         NEW_INVITE,// 新邀请
         INVITE_ACCEPT,//接受邀请
         INVITE_ACCEPT_BY_PEER,// 邀请被接受
+        INVITE_REJEST,//邀请被拒绝
 
         // --以下是群组邀请信息状态--
 

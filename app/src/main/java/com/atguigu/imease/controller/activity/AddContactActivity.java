@@ -70,7 +70,8 @@ public class AddContactActivity extends Activity {
             public void run() {
                 //发送消息
                 try {
-                    EMClient.getInstance().contactManager().addContact(userInfor.getName(), "添加好友");
+                    EMClient.getInstance().contactManager().addContact(userInfor.getName(), "添加好友邀请");
+
                     //提示发送添加好友信息完成
                     runOnUiThread(new Runnable() {
                         @Override

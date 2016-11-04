@@ -27,6 +27,7 @@ public class SplishActivity extends AppCompatActivity {
 
         }
     };
+    private UserInfor account;
 
     private void toMainOrLogin() {
         Model.getInstance().getGlobalThreadPool().execute(new Runnable() {
@@ -34,14 +35,22 @@ public class SplishActivity extends AppCompatActivity {
             public void run() {
                 //分两种情况
                 if (EMClient.getInstance().isLoggedInBefore()) {//登陆过
+
                     //获取登录信息
-                    UserInfor account = Model.getInstance().getmUserAccountDao().getAccountByHxid(EMClient.getInstance().getCurrentUser());
+                    account = Model.getInstance().getmUserAccountDao().getAccountByHxid(EMClient.getInstance().getCurrentUser());
+
                     //跳转登陆界面
                     if (account == null) {
+
                         //登陆界面
                         Intent intent = new Intent(SplishActivity.this, LoginActivity.class);
                         startActivity(intent);
                     } else {
+
+                        //保存数据库
+//                        Model.getInstance().getmUserAccountDao().addAccount(account);
+                        Model.getInstance().loginSucess(account);
+
                         //主界面
                         Intent intent = new Intent(SplishActivity.this, MainActivity.class);
                         startActivity(intent);

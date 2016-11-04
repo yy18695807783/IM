@@ -127,11 +127,11 @@ public class LoginActivity extends Activity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                //记录成功了
+                                //记录成功了-创建数据库
                                 Model.getInstance().loginSucess(new UserInfor(loginName));
                                 //提示登陆成功
                                 Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-                                //保存数据库
+                                //保存数据库-登陆成功
                                 Model.getInstance().getmUserAccountDao().addAccount(new UserInfor(loginName));
                                 //跳转界面
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);

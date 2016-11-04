@@ -15,7 +15,7 @@ import java.util.concurrent.Executors;
  * 微信：y443098360
  * 作用：
  */
-public class Model {
+public class  Model {
     /**
      * 全局线程池
      */
@@ -34,6 +34,10 @@ public class Model {
      */
     private DBHelperManager dbHelperManager;
     private Context mContext;
+    /**
+     * 创建广播
+     */
+    private EventListener mEventListener;
 
     public Model() {
 
@@ -46,7 +50,12 @@ public class Model {
     public void init(Context context) {
         mContext = context;
         //创建数据库
-        mUserAccountDao = new UserAccountDao(context);
+        mUserAccountDao = new UserAccountDao(mContext);
+
+        //创建广播监听
+        if(mEventListener==null){
+            mEventListener = new EventListener(mContext);
+        }
     }
 
     public static Model getInstance() {
