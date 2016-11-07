@@ -8,6 +8,9 @@ package com.atguigu.imease.utils;
  */
 public class Contancts {
 
+
+    //群组邀请信息变化的监听
+    public static String GROUP_INVITE_CHANGED = "group_invite_changed";
     //联系变化的广播
     public static String CONTACT_CHANGED = "contact_changed";
     //联系人邀请变化的广播

@@ -30,9 +30,9 @@ public class InviteAdapter extends BaseAdapter {
 
     private List<InvitationInfo> mInvitationInfos = new ArrayList<>();
 
-    public InviteAdapter(Context context,OnInviteChangedListener mOnInviteChangedListener) {
+    public InviteAdapter(Context context, OnInviteChangedListener mOnInviteChangedListener) {
         mContext = context;
-        this.mOnInviteChangedListener =mOnInviteChangedListener;
+        this.mOnInviteChangedListener = mOnInviteChangedListener;
     }
 
     public void refresh(List<InvitationInfo> invitationInfos) {
@@ -48,7 +48,7 @@ public class InviteAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        Log.e("TAG", "适配器aaaaaaaaaaaaaaaaaaa"+ mInvitationInfos.size());
+        Log.e("TAG", "适配器aaaaaaaaaaaaaaaaaaa" + mInvitationInfos.size());
         return mInvitationInfos == null ? 0 : mInvitationInfos.size();
     }
 
@@ -65,7 +65,7 @@ public class InviteAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Log.e("TAG", "适配器11111111111");
+
         //1.创建ViewHolder
         ViewHolder viewHolder = null;
         //2.初始化convertView及复用
@@ -81,8 +81,8 @@ public class InviteAdapter extends BaseAdapter {
 
         UserInfor user = invitationInfo.getUser();
         if (user != null) {//好友邀请
-            Log.e("TAG", "适配器22222222222222" + user.toString());
             viewHolder.name.setText(user.getName());
+
             //隐藏接受和拒绝按钮
             viewHolder.btn_invite_rejest.setVisibility(View.GONE);
             viewHolder.btn_invite_accept.setVisibility(View.GONE);
@@ -92,56 +92,180 @@ public class InviteAdapter extends BaseAdapter {
                 viewHolder.btn_invite_rejest.setVisibility(View.VISIBLE);
                 viewHolder.btn_invite_accept.setVisibility(View.VISIBLE);
 
-                if (invitationInfo.getReason() != null) {
-                    viewHolder.reason.setText(invitationInfo.getReason());
-                } else {
+//                if (invitationInfo.getReason() != null) {
+//                    viewHolder.reason.setText(invitationInfo.getReason());
+//                } else {
+//                    viewHolder.reason.setText("新邀请信息");
+//                }
                     viewHolder.reason.setText("新邀请信息");
-                }
+
+
+                //设置监听
+                viewHolder.btn_invite_accept.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mOnInviteChangedListener.onAccept(invitationInfo);
+                    }
+                });
+                viewHolder.btn_invite_rejest.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mOnInviteChangedListener.onRejest(invitationInfo);
+                    }
+                });
 
             } else if (InvitationInfo.InvitationStatus.INVITE_ACCEPT == invitationInfo.getStatus()) { //接受邀请信息
-                if (invitationInfo.getReason() != null) {
-                    viewHolder.reason.setText(invitationInfo.getReason());
-                } else {
+//                if (invitationInfo.getReason() != null) {
+//                    viewHolder.reason.setText(invitationInfo.getReason());
+//                } else {
+//                    viewHolder.reason.setText("接受邀请信息");
+//                }
                     viewHolder.reason.setText("接受邀请信息");
-                }
 
             } else if (InvitationInfo.InvitationStatus.INVITE_ACCEPT_BY_PEER == invitationInfo.getStatus()) { //邀请信息被接受
-                if (invitationInfo.getReason() != null) {
-                    viewHolder.reason.setText(invitationInfo.getReason());
-                } else {
+//                if (invitationInfo.getReason() != null) {
+//                    viewHolder.reason.setText(invitationInfo.getReason());
+//                } else {
+//                    viewHolder.reason.setText("邀被接受");
+//                }
                     viewHolder.reason.setText("邀被接受");
-                }
-            }
-            else if (InvitationInfo.InvitationStatus.INVITE_REJEST == invitationInfo.getStatus()) { //邀请信息被拒绝
-                if (invitationInfo.getReason() != null) {
-                    viewHolder.reason.setText(invitationInfo.getReason());
-                } else {
+
+            } else if (InvitationInfo.InvitationStatus.INVITE_REJEST == invitationInfo.getStatus()) { //邀请信息被拒绝
+//                if (invitationInfo.getReason() != null) {
+//                    viewHolder.reason.setText(invitationInfo.getReason());
+//                } else {
+//                    viewHolder.reason.setText("拒绝你");
+//                }
                     viewHolder.reason.setText("拒绝你");
-                }
+
             }
 
 
         } else {//群邀请
 
+            //群邀请的邀请人名称
+            viewHolder.name.setText(invitationInfo.getGroup().getInvitePerson());
+
+            //隐藏接受和拒绝按钮
+            viewHolder.btn_invite_rejest.setVisibility(View.GONE);
+            viewHolder.btn_invite_accept.setVisibility(View.GONE);
+
+            //群组邀请原因
+            switch (invitationInfo.getStatus()) {
+                // 您的群申请请已经被接受
+                case GROUP_APPLICATION_ACCEPTED:
+                    Log.e("TAG2", "适配器1111111111");
+                    viewHolder.reason.setText("您的群申请请已经被接受");
+                    break;
+
+                //  您的群邀请已经被接收
+                case GROUP_INVITE_ACCEPTED:
+                    Log.e("TAG2", "适配器22222222222");
+                    viewHolder.reason.setText("您的群邀请已经被接收");
+                    break;
+
+                // 你的群申请已经被拒绝
+                case GROUP_APPLICATION_DECLINED:
+                    viewHolder.reason.setText("你的群申请已经被拒绝");
+                    break;
+
+                // 您的群邀请已经被拒绝
+                case GROUP_INVITE_DECLINED:
+                    viewHolder.reason.setText("您的群邀请已经被拒绝");
+                    break;
+
+                // 您收到了群邀请
+                case NEW_GROUP_INVITE:
+                    Log.e("TAG2", "适配器33333333");
+                    viewHolder.reason.setText("您收到了群邀请");
+
+                    //显示接受和拒绝按钮
+                    viewHolder.btn_invite_rejest.setVisibility(View.VISIBLE);
+                    viewHolder.btn_invite_accept.setVisibility(View.VISIBLE);
+
+                    //接受群邀请
+                    viewHolder.btn_invite_accept.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mOnInviteChangedListener.onAcceptInvite(invitationInfo);
+                        }
+                    });
+
+                    //拒绝群邀请
+                    viewHolder.btn_invite_rejest.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mOnInviteChangedListener.onRejestInvite(invitationInfo);
+                        }
+                    });
+                    break;
+
+                // 您收到了群申请
+                case NEW_GROUP_APPLICATION:
+                    viewHolder.reason.setText("您收到了群申请");
+
+                    //显示接受和拒绝按钮
+                    viewHolder.btn_invite_rejest.setVisibility(View.VISIBLE);
+                    viewHolder.btn_invite_accept.setVisibility(View.VISIBLE);
+
+                    //接受群申请
+                    viewHolder.btn_invite_accept.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mOnInviteChangedListener.onAcceptApplication(invitationInfo);
+                        }
+                    });
+
+                    //拒绝群申请
+                    viewHolder.btn_invite_rejest.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mOnInviteChangedListener.onRejestApplication(invitationInfo);
+                        }
+                    });
+                    break;
+
+                // 你接受了群邀请
+                case GROUP_ACCEPT_INVITE:
+                    Log.e("TAG2", "适配器444444444444");
+                    viewHolder.reason.setText("你接受了群邀请");
+                    break;
+
+                // 您批准了群申请
+                case GROUP_ACCEPT_APPLICATION:
+                    viewHolder.reason.setText("您批准了群申请");
+                    break;
+
+                // 你拒绝了群邀请
+                case GROUP_REJECT_INVITE:
+                    viewHolder.reason.setText("你拒绝了群邀请");
+                    break;
+
+                // 您拒绝了群申请
+                case GROUP_REJECT_APPLICATION:
+                    viewHolder.reason.setText("您拒绝了群申请");
+                    break;
+            }
+
+
         }
 
 
-        //设置监听
-        viewHolder.btn_invite_accept.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mOnInviteChangedListener.onAccept(invitationInfo);
-            }
-        });
-        viewHolder.btn_invite_rejest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mOnInviteChangedListener.onRejest(invitationInfo);
-            }
-        });
+//        //设置监听
+//        viewHolder.btn_invite_accept.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mOnInviteChangedListener.onAccept(invitationInfo);
+//            }
+//        });
+//        viewHolder.btn_invite_rejest.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mOnInviteChangedListener.onRejest(invitationInfo);
+//            }
+//        });
 
         //4返回数据
-        Log.e("TAG", "适配器3333333333333333");
         return convertView;
     }
 
@@ -160,7 +284,6 @@ public class InviteAdapter extends BaseAdapter {
 
 
         public ViewHolder(View view) {
-            Log.e("TAG", "适配器55555555555555555555555555");
             ButterKnife.bind(this, view);
         }
     }
@@ -171,6 +294,18 @@ public class InviteAdapter extends BaseAdapter {
 
         //拒绝的监听回调方法
         void onRejest(InvitationInfo invitationInfo);
+
+        //接受群邀请
+        void onAcceptInvite(InvitationInfo invitationInfo);
+
+        //拒绝群邀请
+        void onRejestInvite(InvitationInfo invitationInfo);
+
+        //接受群申请
+        void onAcceptApplication(InvitationInfo invitationInfo);
+
+        //拒绝群申请
+        void onRejestApplication(InvitationInfo invitationInfo);
     }
 
     private OnInviteChangedListener mOnInviteChangedListener;
@@ -180,7 +315,7 @@ public class InviteAdapter extends BaseAdapter {
 //     *
 //     * @return
 //     */
-//    public OnInviteChangedListener getmOnInviteChangedListener() {
-//        return mOnInviteChangedListener;
+//    public void setmOnInviteChangedListener(OnInviteChangedListener mOnInviteChangedListener) {
+//        this.mOnInviteChangedListener = mOnInviteChangedListener;
 //    }
 }

@@ -2,7 +2,6 @@ package com.atguigu.imease.controller.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -115,12 +114,171 @@ public class InviteActivity extends Activity {
                 }
             });
         }
+
+        //接受群邀请
+        @Override
+        public void onAcceptInvite(final InvitationInfo invitationInfo) {
+            //联网
+            Model.getInstance().getGlobalThreadPool().execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        //联网环信服务器接受群邀请
+                        //参数一：接受群组id  参数二：群组邀请人
+                        EMClient.getInstance().groupManager()
+                                .acceptInvitation(invitationInfo.getGroup().getGroupId(), invitationInfo.getGroup().getInvitePerson());
+
+                        //本地数据库
+                        invitationInfo.setStatus(InvitationInfo.InvitationStatus.GROUP_ACCEPT_INVITE);
+                        Model.getInstance().getDbHelperManager().getInvitationTableDao().addInvitation(invitationInfo);
+
+                        //内存和页面
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(InviteActivity.this, "接受群邀请成功", Toast.LENGTH_SHORT).show();
+
+                                //刷新页面
+                                refresh();
+                            }
+                        });
+                    } catch (final HyphenateException e) {
+                        e.printStackTrace();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(InviteActivity.this, "接受群邀请失败" + e.toString(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }
+            });
+        }
+
+        //拒绝群邀请
+        @Override
+        public void onRejestInvite(final InvitationInfo invitationInfo) {
+            //联网
+            Model.getInstance().getGlobalThreadPool().execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        //网络
+                        //参数一：邀请群组id  参数二：邀请人信息  参数三：拒绝原因
+                        EMClient.getInstance().groupManager()
+                                .declineInvitation(invitationInfo.getGroup().getGroupId(), invitationInfo.getGroup()
+                                        .getInvitePerson(), "拒绝了求你邀请");
+
+                        //本地数据库
+                        invitationInfo.setStatus(InvitationInfo.InvitationStatus.GROUP_REJECT_INVITE);
+                        Model.getInstance().getDbHelperManager().getInvitationTableDao().addInvitation(invitationInfo);
+
+                        //内存和页面
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(InviteActivity.this, "拒绝了群邀请", Toast.LENGTH_SHORT).show();
+
+                                //刷新页面
+                                refresh();
+                            }
+                        });
+                    } catch (final HyphenateException e) {
+                        e.printStackTrace();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(InviteActivity.this, "拒绝群邀请失败" + e.toString(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }
+            });
+        }
+
+        //接受群申请
+        @Override
+        public void onAcceptApplication(final InvitationInfo invitationInfo) {
+            //联网
+            Model.getInstance().getGlobalThreadPool().execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        //网络
+                        //参数一：接受群组id  参数二：群组申请人
+                        EMClient.getInstance().groupManager().acceptApplication(invitationInfo
+                                .getGroup().getGroupId(), invitationInfo.getGroup().getInvitePerson());
+
+                        //本地
+                        invitationInfo.setStatus(InvitationInfo.InvitationStatus.GROUP_ACCEPT_APPLICATION);
+                        Model.getInstance().getDbHelperManager().getInvitationTableDao().addInvitation(invitationInfo);
+
+                        //内存和页面
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(InviteActivity.this, "绝收群申请", Toast.LENGTH_SHORT).show();
+
+                                //刷新页面
+                                refresh();
+                            }
+                        });
+                    } catch (final HyphenateException e) {
+                        e.printStackTrace();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(InviteActivity.this, "拒绝群申请失败" + e.toString(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }
+            });
+        }
+
+        //拒绝群申请
+        @Override
+        public void onRejestApplication(final InvitationInfo invitationInfo) {
+            Model.getInstance().getGlobalThreadPool().execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        //网络
+                        //参数一：邀请群组id  参数二：申请人信息  参数三：拒绝原因
+                        EMClient.getInstance().groupManager().declineApplication(invitationInfo
+                                .getGroup().getGroupId(), invitationInfo.getGroup().getInvitePerson(), "拒绝了群申请");
+
+                        //本地
+                        invitationInfo.setStatus(InvitationInfo.InvitationStatus.GROUP_REJECT_APPLICATION);
+                        Model.getInstance().getDbHelperManager().getInvitationTableDao().addInvitation(invitationInfo);
+
+                        //内存和页面
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(InviteActivity.this, "拒绝群申请", Toast.LENGTH_SHORT).show();
+
+                                //刷新页面
+                                refresh();
+                            }
+                        });
+                    } catch (final HyphenateException e) {
+                        e.printStackTrace();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(InviteActivity.this, "拒绝群申请失败" + e.toString(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }
+            });
+        }
     };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.e("TAG", "44444444444444444444444444");
 
         setContentView(R.layout.activity_add_invite);
         ButterKnife.bind(this);
@@ -129,7 +287,6 @@ public class InviteActivity extends Activity {
     }
 
     private void initData() {
-        Log.e("TAG", "5555555555555555555");
         inviteAdapter = new InviteAdapter(this, mOnInviteChangedListener);
 
         listviewAddinvite.setAdapter(inviteAdapter);
@@ -140,11 +297,10 @@ public class InviteActivity extends Activity {
 
     //刷新页面
     private void refresh() {
-        Log.e("TAG", "6666666666666666666666666666");
         //获取数据库中的邀请信息
         List<InvitationInfo> invitationInfos = Model.getInstance().getDbHelperManager().getInvitationTableDao().getInvitations();
 
-        Log.e("TAG", "取值7777777777777777777777---" + invitationInfos.toString());//空  没取出来
         inviteAdapter.refresh(invitationInfos);
     }
+
 }
