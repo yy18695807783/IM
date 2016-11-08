@@ -31,7 +31,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".controller.activity.MainActivity" />
+        <activity android:name=".controller.activity.MainActivity"
+            android:windowSoftInputMode="adjustPan"/>
+        <!-- android:windowSoftInputMode="adjustPan"  这个可以让activity承载的fragment不会吧布局压缩，底部button不会被顶上去-->
         <activity android:name=".controller.activity.SplishActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

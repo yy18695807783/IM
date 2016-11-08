@@ -19,6 +19,6 @@ public class Contancts {
     //群组详情页面
     public static String GROUP_ID = "group_id";
 
-    //退群广播
+    //退群广播/解散群广播
     public static String EXIT_GROUP = "EXIT_GROUP";
 }

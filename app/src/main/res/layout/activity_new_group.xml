@@ -22,15 +22,20 @@
             android:id="@+id/et_group_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/et_group_detail_bg"
             android:hint="群聊名称"
+            android:padding="3dp"
             android:textSize="20sp" />
 
         <EditText
             android:id="@+id/et_group_detail"
             android:layout_width="match_parent"
             android:layout_height="150dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/et_group_detail_bg"
             android:gravity="start"
             android:hint="群聊简介"
+            android:padding="3dp"
             android:textSize="20sp" />
 
         <LinearLayout

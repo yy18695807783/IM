@@ -126,6 +126,7 @@ public class ChatActivity extends FragmentActivity {
                     }
                 }
             };
+
             mLBM.registerReceiver(mExistBroadcastreceiver, new IntentFilter(Contancts.EXIT_GROUP));
         }
 

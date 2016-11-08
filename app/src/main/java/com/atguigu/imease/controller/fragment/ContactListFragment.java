@@ -238,7 +238,7 @@ public class ContactListFragment extends EaseContactListFragment {
      */
     private void initListener() {
 
-        //标题右边加号的点击监听
+        //标题右边 加号 的点击监听
         titleBar.setRightLayoutClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -258,7 +258,7 @@ public class ContactListFragment extends EaseContactListFragment {
             @Override
             public void onClick(View v) {
 //                Toast.makeText(getActivity(), "好友邀请", Toast.LENGTH_SHORT).show();
-                //点击先隐藏红点
+                //点击先隐藏 红点
                 SpUtils.getInstance().save(SpUtils.IS_NEW_INVITE, false);
                 redPoint.setVisibility(View.GONE);
 
