@@ -14,6 +14,9 @@ import com.atguigu.imease.controller.adapter.PickContactsAdapter;
 import com.atguigu.imease.model.Model;
 import com.atguigu.imease.model.bean.PickContactsInfo;
 import com.atguigu.imease.model.bean.UserInfor;
+import com.atguigu.imease.utils.Contancts;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +33,7 @@ public class PickContactsActivity extends Activity {
     private PickContactsAdapter pickContactsAdapter;
     //是否选中加入群组的联系人
     private List<PickContactsInfo> pickContactsInfos;
+    private List<String> mMembers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +43,27 @@ public class PickContactsActivity extends Activity {
 
         //获取已经存在的群成员
 
+        //获得信息
+        getData();
+
         initData();
         initListener();
+
+    }
+
+    private void getData() {
+        //获取群id  用于群邀请
+        String groupId = getIntent().getStringExtra(Contancts.GROUP_ID);
+
+        if(groupId != null){
+            EMGroup emGroup = EMClient.getInstance().groupManager().getGroup(groupId);
+
+            //获取所有群成员
+            mMembers = emGroup.getMembers();
+        }else {
+            mMembers = new ArrayList<>();
+        }
+
 
     }
 
@@ -99,7 +122,7 @@ public class PickContactsActivity extends Activity {
         }
 
         //设置适配器
-        pickContactsAdapter = new PickContactsAdapter(this,pickContactsInfos);
+        pickContactsAdapter = new PickContactsAdapter(this,pickContactsInfos,mMembers);
 
         lvAddcontactTogroup.setAdapter(pickContactsAdapter);
 

@@ -305,7 +305,7 @@ public class ContactListFragment extends EaseContactListFragment {
                     List<String> allContacts = EMClient.getInstance().contactManager().getAllContactsFromServer();
 
                     if (allContacts != null && allContacts.size() >= 0) {
-                        List<UserInfor> users = new ArrayList<UserInfor>();
+                        List<UserInfor> users = new ArrayList <UserInfor>();
                         //便利
                         for (String hxid : allContacts) {
                             UserInfor userInfor = new UserInfor(hxid);

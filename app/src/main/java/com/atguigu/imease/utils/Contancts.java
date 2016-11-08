@@ -16,4 +16,9 @@ public class Contancts {
     //联系人邀请变化的广播
     public static String CONTACT_INVITE_CHANGED = "contact_invite_changed";
 
+    //群组详情页面
+    public static String GROUP_ID = "group_id";
+
+    //退群广播
+    public static String EXIT_GROUP = "EXIT_GROUP";
 }

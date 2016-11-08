@@ -30,13 +30,20 @@ public class PickContactsAdapter extends BaseAdapter {
     private List<String> mExistMembers = new ArrayList<>();
     private Context mContext;
 
-    public PickContactsAdapter(Context context, List<PickContactsInfo> pickContactsInfos) {
+
+    public PickContactsAdapter(Context context, List<PickContactsInfo> pickContactsInfos, List<String> members) {
         mContext = context;
 
         if (pickContactsInfos != null && pickContactsInfos.size() >= 0) {
             mPickContactsInfos.clear();
 
             mPickContactsInfos.addAll(pickContactsInfos);
+        }
+
+        if (members != null && members.size() >= 0) {
+            mExistMembers.clear();
+
+            mExistMembers.addAll(members);
         }
     }
 
@@ -71,6 +78,12 @@ public class PickContactsAdapter extends BaseAdapter {
         //装配数据
         viewHolder.name.setText(pickContactsInfo.getUser().getName());
         viewHolder.choose.setChecked(pickContactsInfo.getIsChecked());
+
+        if (mExistMembers.contains(pickContactsInfo.getUser().getHxid())) {
+            viewHolder.choose.setChecked(true);//页面
+            pickContactsInfo.setIsChecked(true);//内存
+        }
+
         //返回数据
         return convertView;
     }
@@ -92,10 +105,10 @@ public class PickContactsAdapter extends BaseAdapter {
     public List<String> getAddMembers() {
         List<String> picks = new ArrayList<>();
 
-        for (PickContactsInfo pick :mPickContactsInfos) {
+        for (PickContactsInfo pick : mPickContactsInfos) {
             //判断是否被选中
             if (pick.getIsChecked()) {
-                picks.add(pick.getUser().getName());
+                picks.add(pick.getUser().getHxid());
             }
         }
         //返回数据
